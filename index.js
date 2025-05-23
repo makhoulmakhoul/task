@@ -7,16 +7,22 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'mkl28618',
-  database: 'todo_db'
-});
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || 'mkl28618',
+    database: process.env.DB_DATABASE || 'todo_db',
+    port: process.env.DB_PORT || 3306,
+  });
+  
 
 db.connect(err => {
   if (err) throw err;
   console.log('Connected to MySQL');
 });
+// Health check route
+app.get('/', (req, res) => {
+    res.send('Todo API is running');
+  });
 
 // Get all tasks
 app.get('/tasks', (req, res) => {
@@ -53,6 +59,8 @@ app.delete('/tasks/:id', (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
+
