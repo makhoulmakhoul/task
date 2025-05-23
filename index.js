@@ -19,7 +19,24 @@ const db = mysql.createConnection({
 db.connect(err => {
   if (err) throw err;
   console.log('Connected to MySQL');
+
+  // Modify the task table to ensure 'id' is AUTO_INCREMENT and PRIMARY KEY
+  const alterTableQuery = `
+    ALTER TABLE tsk 
+    MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT,
+    ADD PRIMARY KEY (id)
+  `;
+
+  db.query(alterTableQuery, (err) => {
+    if (err && err.code !== 'ER_DUP_KEYNAME') {
+      console.error('Error modifying task table:', err);
+    } else {
+      console.log('Task table modified (id set as AUTO_INCREMENT PRIMARY KEY)');
+    }
+  });
 });
+
+
 // Health check route
 app.get('/', (req, res) => {
     res.send('Todo API is running');
@@ -64,4 +81,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
