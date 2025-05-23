@@ -20,19 +20,19 @@ db.connect(err => {
   if (err) throw err;
   console.log('Connected to MySQL');
 
-  // Modify the task table to ensure 'id' is AUTO_INCREMENT and PRIMARY KEY
-  const alterTableQuery = 'ALTER TABLE tsk 
-MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT';
+  const alterTableQuery = `
+    ALTER TABLE tsk 
+    MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT
+  `;
 
   db.query(alterTableQuery, (err) => {
-    if (err && err.code !== 'ER_DUP_KEYNAME') {
+    if (err) {
       console.error('Error modifying task table:', err);
     } else {
-      console.log('Task table modified (id set as AUTO_INCREMENT PRIMARY KEY)');
+      console.log('Task table modified (id set as AUTO_INCREMENT)');
     }
   });
 });
-
 
 // Health check route
 app.get('/', (req, res) => {
