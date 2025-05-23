@@ -21,11 +21,8 @@ db.connect(err => {
   console.log('Connected to MySQL');
 
   // Modify the task table to ensure 'id' is AUTO_INCREMENT and PRIMARY KEY
-  const alterTableQuery = `
-    ALTER TABLE tsk 
-    MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT,
-    ADD PRIMARY KEY (id)
-  `;
+  const alterTableQuery = 'ALTER TABLE tsk 
+MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT';
 
   db.query(alterTableQuery, (err) => {
     if (err && err.code !== 'ER_DUP_KEYNAME') {
